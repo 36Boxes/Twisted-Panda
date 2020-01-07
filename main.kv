@@ -1,0 +1,2504 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import RGBA kivy.utils.rgba
+#:import sin math.sin
+#:import cos math.cos
+#:import pi math.pi
+#:import degrees math.degrees
+#:import Factory kivy.factory.Factory
+
+ScreenManagement:
+    transition: FadeTransition()
+    Login_Screen:
+    Selection_Screen:
+    Picking_Mode:
+    Individual_Picklist:
+    Individual_Item:
+    Checking_Mode:
+    Individual_Checklist:
+    Individual_Check:
+    Individual_Check_Error:
+    Receipting_Mode:
+    Individual_Receipt_List:
+    Individual_Receipt:
+    Receipting_Error:
+    Put_Away_Mode:
+    Individual_Put_Away:
+    Put_Away_Item:
+
+<Login_Screen>:
+    name: 'Login_Screen'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        id: box
+        orientation: 'vertical'
+        canvas.before:
+        Button:
+            id: Login_connector
+            text: 'Fleet Retail Packaging'
+            size_hint_y: None
+            height: 40
+            color: 1,1,1,1
+            background_normal: ''
+            background_color: 0, .4666, 0.70196, 1
+        Widget:
+            size_hint: 1, 0.05
+        Image:
+            source: 'login-user-png-7.png'
+        Widget:
+            size_hint: 1, 0.05
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 20,20,20,20
+            spacing: 8
+            Button:
+                id: martin
+                text: 'Martin Coles'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.setuserm()
+                on_release: app.root.current = 'Selection_Screen'
+            Button:
+                text: 'Kieran Johnson'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.setuserk()
+                on_release: app.root.current = 'Selection_Screen'
+            Button:
+                text: 'Joe Dewhurst'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_release: app.root.current = 'Selection_Screen'
+                on_press: root.setuserj()
+            Button:
+                text: 'Peter Smith'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+#                on_release: app.root.current = 'Selection_Screen'
+                on_press: root.setuserp()
+            Button:
+                text: 'Reconnect'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.connect_to_server()
+
+
+
+<Selection_Screen>:
+    name: 'Selection_Screen'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        background_normal: ''
+        background_color: 0.90196078, 0.90196078, 1, 1
+        Label:
+            text: 'Fleet Retail Packaging'
+            color: 1,1,1,1
+            size_hint: 1,.05
+            height: 40
+            canvas.before:
+                Color:
+                    rgba: 0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Label:
+            size_hint: 1, .04
+        BoxLayout:
+            size_hint: 1, .8
+            orientation: 'horizontal'
+            padding: 20,10,20,20
+            BoxLayout:
+                spacing: 20
+                padding: 10,10,10,10
+                orientation: 'vertical'
+                Button:
+                    id: pick
+                    text: 'Picking Lists'
+                    background_normal: ''
+                    background_color: 0, .4666, 0.70196, 1
+                    on_press: root.Get_Picking_Lists()
+                Button:
+                    text: 'Checking Lists'
+                    background_normal: ''
+                    background_color: 0, .4666, 0.70196, 1
+                    on_press: root.Get_Check_Lists()
+            BoxLayout:
+                spacing: 20
+                orientation: 'vertical'
+                padding: 10,10,10,10
+                Button:
+                    text: 'Put Away Mode'
+                    background_normal: ''
+                    background_color: 0, .4666, 0.70196, 1
+                    on_press: root.Get_Put_Away_Lists()
+                Button:
+                    text: 'Receipting Mode'
+                    background_normal: ''
+                    background_color: 0, .4666, 0.70196, 1
+                    on_press: root.Get_Shipment_Lists()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1,.05
+            Label:
+            Button:
+                text: 'Log Out'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: app.root.current = 'Login_Screen'
+                on_press: root.logout()
+            Label:
+            Button:
+                text: 'reconnect'
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+        Label:
+            size_hint: .1,.01
+
+
+<Picking_Mode>:
+    name: 'Picking_Mode'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                size_hint_x: 0.7
+                height: 60
+                color: 1,1,1,1
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.3
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Selection_Screen'
+                size_hint_x: 0.35
+
+            Button:
+                text: "Refresh Today's Refs"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_press: root.Refresh_Function()
+                size_hint_x: 0.65
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server1()
+
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: [0,0,0,5]
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            Label:
+                text: 'Reference'
+                size_hint_x: 0.63
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Button:
+                text: 'Status'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                size_hint_x: 0.305
+        BoxLayout:
+            id: boxer
+
+
+<Individual_Picklist>:
+    name: 'Individual_Picklist'
+    id: checko
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Fleet Retail Packaging'
+            size_hint_y: None
+            height: 60
+            color: 1,1,1,1
+            canvas.before:
+                Color:
+                    rgba: 0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Label:
+            size_hint_y: None
+            height: 5
+        BoxLayout:
+            padding: [5,0,5,0]
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Picking_Mode'
+            Label:
+                id: picklistnum
+                text: 'Picklist Number : '
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+            Button:
+                text: 'Refresh!'
+                color: 1,1,1,1
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                id: picklistid
+                on_release: root.refresh()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,0]
+            Button:
+                size_hint_x: 0.33
+                text: 'Location'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.6
+                text: 'Product Code'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.13
+                text: 'Status'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+
+        BoxLayout:
+            id: paxson
+            orientation: 'vertical'
+
+
+<Individual_Item>:
+    name: 'Individual_Item'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint: 1, 0.05
+            text: 'Fleet Retail Packaging'
+            canvas.before:
+                Color:
+                    rgba:  0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Label:
+            size_hint: 1, 0.01
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            size_hint: 1, 0.1
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Individual_Picklist'
+
+
+            Button:
+                text: 'Reconnect'
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+            Label:
+                id: itemnumberdisplay
+                font_size: dp(13)
+                text: 'Item Number'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            spacing: 10
+            size_hint: 1, 0.05
+
+            Label:
+            Label:
+                id: refnum
+                bold: True
+                font_size: dp(20)
+                text: ''
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [50,10,50,10]
+            BoxLayout:
+                orientation: 'vertical'
+                padding:[10,5,10,5]
+                spacing: 10
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        size_hint_x: 0.4
+                        text: 'Error Log : '
+                        canvas.before:
+                            Color:
+                                rgba:  0, .4666, 0.70196, 1
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                    TextInput:
+                        id: error
+                        height: self.minimum_height
+                        font_size: dp(40)
+
+
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                Label:
+                    text: 'Location'
+                    size_hint_x: 0.4
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: location
+                    font_size: dp(30)
+                    bold: True
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                Label:
+                    id: description
+                    bold: True
+                    font_size: dp(18)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                Label:
+                    text: 'Product Code'
+                    size_hint_x: 0.4
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: productcode
+                    bold: True
+                    font_size: dp(22)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.3
+                Label:
+                    text: 'Quantity of Pieces'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    text: 'Quantity of Cartons'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                Label:
+                    id: qop
+                    font_size: dp(30)
+                    bold: True
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: qoc
+                    font_size: dp(30)
+                    bold: True
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+        BoxLayout:
+            spacing: 10
+            size_hint_y: 0.1
+            BoxLayout:
+                spacing: 10
+                Button:
+                    text: '- Piece'
+                    background_normal: ''
+                    background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                    on_press: root.Removed_Piece_On_Pallet()
+                Button:
+                    text: '+ Piece'
+                    background_normal: ''
+                    background_color: 0, 0.52156863, 0.25098039, 1
+                    on_press: root.Placed_Piece_On_Pallet()
+
+            BoxLayout:
+                spacing: 10
+                Button:
+                    text: '- Carton'
+                    background_normal: ''
+                    background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                    on_press: root.Removed_Carton_On_Pallet()
+                Button:
+                    text: '+ Carton'
+                    on_press: root.Placed_Carton_On_Pallet()
+                    background_normal: ''
+                    background_color: 0, 0.52156863, 0.25098039, 1
+        BoxLayout:
+            size_hint: 1, 0.1
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            Button:
+                text: 'Previous Item'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_release: root.Previous_Item()
+                size_hint_x: 0.4
+            Button:
+                text: 'Mark Item as Picked / Log Error'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_release: root.are_ya_sure_buddy()
+                size_hint_x: 0.6
+        BoxLayout:
+            size_hint: 1, 0.1
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            Button:
+                id: Marko_Picko
+                text: 'Mark as Complete'
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_press: root.are_yu_sure_abeet_that()
+
+<Checking_Mode>:
+    name: 'Checking_Mode'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.7
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer2
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.3
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Selection_Screen'
+                size_hint_x: 0.35
+            Button:
+                text: 'Send Data'
+                background_normal: ''
+                background_color: (1, 0.68235294, 0.25882353, 1)
+                on_press: root.ho_ho_hold_up_now()
+            Button:
+                text: "Today's Checklist"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_press: root.Get_Check_Lists()
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,5]
+            Label:
+                size_hint_x: 0.666666666
+                text: 'Reference'
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                size_hint_x: 0.3333333333
+                text: 'Status'
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            padding:[20,0,20,0]
+            id: boxer
+
+
+
+
+<Individual_Checklist>:
+    name: 'Individual_Checklist'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.7
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer2
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.3
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                size_hint_x: 0.35
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Checking_Mode'
+            Label:
+                size_hint_x: 0.35
+                id: ref_displayer
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+
+            Button:
+                size_hint_x: 0.3
+                text: "Refresh"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_press: root.Send_MBDTF()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,5]
+            Label:
+                size_hint_x: 0.6
+                text: 'Product Code'
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                size_hint_x: 0.27
+                text: 'Quan Of Cartons'
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                size_hint_x: 0.13
+                text: 'Status'
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            padding:[20,0,20,0]
+            id: boxer
+
+
+
+
+
+
+
+
+<Individual_Check>:
+    name: 'Individual_Check'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint: 1, 0.05
+            text: 'Fleet Retail Packaging'
+            canvas.before:
+                Color:
+                    rgba:  0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Label:
+            size_hint: 1, 0.01
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            size_hint: 1, 0.1
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Individual_Checklist'
+
+
+            Button:
+                text: 'Reconnect'
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+            Label:
+                id: itemnumberdisplay
+                font_size: dp(13)
+                text: 'Item Number'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            spacing: 10
+            size_hint: 1, 0.05
+
+            Label:
+            Label:
+                id: refnum
+                bold: True
+                font_size: dp(20)
+                text: ''
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [50,10,50,10]
+            BoxLayout:
+                padding:[10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.7
+                Label:
+                    size_hint_x: 0.4
+                    text: 'Error\nEncountered : '
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: error
+                    bold: True
+                    color: [0,0,0,1]
+                    font_size: dp(30)
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                Label:
+                    id: description
+                    bold: True
+                    font_size: dp(18)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.7
+                Label:
+                    text: 'Product Code'
+                    size_hint_x: 0.4
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: productcode
+                    bold: True
+                    font_size: dp(22)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint: 1, 0.3
+                Label:
+                    text: 'Quantity of Pieces'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    text: 'Quantity of Cartons'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.7
+                Label:
+                    id: qop
+                    font_size: dp(40)
+                    bold: True
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: qoc
+                    font_size: dp(40)
+                    bold: True
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.4
+                BoxLayout:
+                    spacing: 10
+                    Button:
+                        text: '-- Piece'
+                        background_normal: ''
+                        background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                        on_press: root.Removed_Piece_On_Pallet()
+                    Button:
+                        text: ' + Piece'
+                        background_normal: ''
+                        background_color: 0, 0.52156863, 0.25098039, 1
+                        on_press: root.Placed_Piece_On_Pallet()
+
+                BoxLayout:
+                    spacing: 10
+                    Button:
+                        text: '-- Carton'
+                        background_normal: ''
+                        background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                        on_press: root.Removed_Carton_On_Pallet()
+                    Button:
+                        text: '+ Carton'
+                        on_press: root.Placed_Carton_On_Pallet()
+                        background_normal: ''
+                        background_color: 0, 0.52156863, 0.25098039, 1
+            BoxLayout:
+                orientation:'vertical'
+                padding: [10,5,10,5]
+                spacing: 10
+                Label:
+                    canvas.before:
+                        Color:
+                            rgba:   0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    size_hint_y: 0.3
+                    text: 'Picked By'
+                Label:
+                    id: pickedby
+                    bold: True
+                    font_size: dp(20)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                orientation:'vertical'
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.4
+                Button:
+                    text:'Error Encountered!'
+                    on_press: app.root.current = 'Individual_Check_Error'
+                    background_normal: ''
+                    background_color: 0.89803922, 0.25882353, 0.25882353, 1
+
+
+
+
+        BoxLayout:
+            size_hint: 1, 0.1
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            Button:
+                text: 'Previous Item'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_release: root.Previous_Item()
+                size_hint_x: 0.4
+            Button:
+                text: 'Mark Item as Checked / Log Error'
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_release: root.Next_Item()
+                size_hint_x: 0.6
+
+
+
+
+<Individual_Check_Error>
+    name: 'Individual_Check_Error'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,0]
+        BoxLayout:
+            size_hint_y: 0.2
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+
+                color: 1,1,1,1
+                size_hint_x: 0.65
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer2
+                color: 1,1,1,1
+                size_hint_x: 0.35
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.2
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                padding: [0,5,0,5]
+                Button:
+                    size_hint_x: 0.4
+                    text: 'Go Back'
+                    background_normal: ''
+                    background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                    on_press: app.root.current = 'Individual_Check'
+                Button:
+                    text: 'Reconnect'
+                    background_normal: ''
+                    background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                    on_press: root.connect_to_server()
+                Button:
+                    size_hint_x: 0.6
+                    text: "Checking Error Mode"
+                    background_normal: ''
+                    background_color: 0, .4666, 0.70196, 1
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.8
+            spacing: 10
+
+            Button:
+                text: 'Incorrect Product'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.IP_makesure()
+            Label:
+                id: locat
+                bold: True
+                font_size: dp(20)
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            padding:[0,10,0,10]
+            spacing: 10
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Total Pieces'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    id: QOP
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Total Cartons'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: QOC
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,0,0,10]
+            size_hint_y: 0.6
+            Button:
+                text: 'Quantity Extra'
+                size_hint_x: 0.5
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.QE_makesure()
+
+            Button:
+                text: 'Quantity Short'
+                size_hint_x: 0.5
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.QS_makesure()
+        BoxLayout:
+            padding: [0,0,0,10]
+            Label:
+                id: ProductCode
+                bold: True
+                font_size: dp(22)
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            padding: [0,0,0,10]
+            size_hint_y: 0.6
+            Button:
+                text: 'Quantity of Product Damaged '
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_press: root.QD_makesure()
+
+
+
+
+<Receipting_Mode>:
+    name: 'Receipting_Mode'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                size_hint_x: 0.7
+                height: 60
+                color: 1,1,1,1
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.27
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                size_hint_x: 0.35
+                on_press: app.root.current = "Selection_Screen"
+
+            Button:
+                text: "Refresh Shipments"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                size_hint_x: 0.65
+                on_press: root.Get_Shipments()
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,5]
+            Button:
+                size_hint_x: 0.5
+                text: 'Shipment Reference'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.27
+                text: 'EST Arrival'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.23
+                text: 'Status'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+        BoxLayout:
+            id: bally
+
+<Individual_Receipt_List>:
+    name: 'Individual_Receipt_List'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                size_hint_x: 0.7
+                height: 60
+                color: 1,1,1,1
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.27
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                size_hint_x: 0.35
+                on_press: app.root.current = 'Receipting_Mode'
+            Button:
+                text: "Refresh Shipments"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                size_hint_x: 0.65
+                on_press: root.Send_Talib()
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,5]
+            Button:
+                size_hint_x: 0.5
+                text: 'Product Code'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.27
+                text: 'Quan of Cartons'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.23
+                text: 'Status'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+        BoxLayout:
+            id: rajpac
+
+
+
+<Individual_Receipt>
+    name: "Individual_Receipt"
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint: 1, 0.1
+            text: 'Fleet Retail Packaging'
+            canvas.before:
+                Color:
+                    rgba:  0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        Label:
+            size_hint_y: None
+            height: 10
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            size_hint: 1, 0.2
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Individual_Receipt_List'
+
+
+            Button:
+                text: 'Reconnect'
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+            Label:
+                id: itemnumberdisplay
+                font_size: dp(13)
+                text: 'Item Number'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            spacing: 10
+            size_hint: 1, 0.15
+
+            Button:
+                id: ErrorButton
+                font_size: dp(13)
+                text: 'Error Encountered'
+                background_normal: ''
+                background_color:  0.68235294, 0, 0.72156863, 1
+
+                on_press: app.root.current = 'Receipting_Error'
+            Label:
+                id: refnum
+                bold: True
+                font_size: dp(20)
+                text: ''
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: palletnum
+                font_size: dp(13)
+                text: 'Pallet Number'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [50,10,50,10]
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.17
+                Label:
+                    id: description
+                    bold: True
+                    font_size: dp(18)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.17
+                Label:
+                    id: productcode
+                    bold: True
+                    font_size: dp(22)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+        BoxLayout:
+
+            spacing:
+            size_hint: 1, 0.2
+            orientation: 'horizontal'
+            Label:
+                size_hint_x: 0.4
+                text: 'Quantity of Pieces'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+            Label:
+                size_hint_x: 0.2
+
+
+            Label:
+                size_hint_x: 0.4
+
+                text: 'Quantity of Cartons'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+
+
+            size_hint_y: 0.4
+            orientation: 'horizontal'
+            Label:
+                size_hint_x: 0.4
+                id: qop
+                font_size: dp(40)
+                bold: True
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                size_hint_x: 0.2
+
+            Label:
+                size_hint_x: 0.4
+                id: qoc
+                font_size: dp(40)
+                bold: True
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+
+
+            size_hint_y: 0.2
+            BoxLayout:
+
+                Label:
+                    size_hint_x: 0.4
+                    text: 'Pieces on Pallet'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    size_hint_x: 0.2
+                    text: 'Palletize'
+                    canvas.before:
+                        Color:
+                            rgba: 0.97647059, 0.55294118, 0, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    size_hint_x: 0.4
+                    text: 'Cartons on Pallet'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+        BoxLayout:
+
+            size_hint_y: 0.4
+            Label:
+                size_hint_x: 0.4
+                id: qop_Placed_pallet
+                font_size: dp(40)
+                bold: True
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+            Button:
+                size_hint_x: 0.2
+                background_normal: ''
+                background_color: 0.97647059, 0.55294118, 0, 1
+                on_press: root.Palletize()
+
+            Label:
+                size_hint_x: 0.4
+                id: qoc_Placed_pallet
+                font_size: dp(40)
+                bold: True
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+
+
+            size_hint_y: 0.2
+            BoxLayout:
+
+                Label:
+                    size_hint_x: 0.4
+                    text: 'Total Pieces Receipted'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    size_hint_x: 0.2
+
+
+                Label:
+                    size_hint_x: 0.4
+                    text: 'Total Cartons Receipted'
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+        BoxLayout:
+
+            size_hint_y: 0.4
+            Label:
+                size_hint_x: 0.4
+                id: qop_Placed
+                font_size: dp(40)
+                bold: True
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+            Label:
+                size_hint_x: 0.2
+
+
+            Label:
+                size_hint_x: 0.4
+                id: qoc_Placed
+                font_size: dp(40)
+                bold: True
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            padding: [0,10,0,0]
+            size_hint_y: 0.2
+
+            Button:
+                size_hint_x: 0.4
+                text: '-- Carton'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: root.Removed_Carton()
+            Label:
+                size_hint_x: 0.2
+            Button:
+                size_hint_x: 0.4
+                text: '+ Carton'
+                on_press: root.Placed_Carton()
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+        BoxLayout:
+            size_hint: 1, 0.2
+            padding: [0,10,0,0]
+            Button:
+                size_hint_x: 0.4
+                text: 'Previous Pallet'
+                background_normal: ''
+                background_color: (0.96862745, 0.70196078, 0.02745098, 1)
+                on_press: root.Change_Pallet_To_Previous()
+            Label:
+                size_hint_x: 0.2
+            Button:
+                size_hint_x: 0.4
+                text: 'Next Pallet'
+                background_normal: ''
+                background_color: (0.96862745, 0.70196078, 0.02745098, 1)
+                on_press: root.Change_Pallet()
+        BoxLayout:
+            size_hint: 1, 0.2
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            Button:
+                text: 'Previous Item'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                on_release: root.Previous_Item()
+                size_hint_x: 0.4
+            Button:
+                text: 'Mark as Receipted'
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_release: root.Marko_Receipto()
+                size_hint_x: 0.6
+        BoxLayout:
+            size_hint: 1, 0.2
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            Button:
+                id: Marko_Picko
+                text: 'Mark as Complete'
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                on_press: root.Are_Ya_Sure_Mate()
+
+<Receipting_Error>
+    name:'Receipting_Error'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint_y: 0.1
+            text: 'Fleet Retail Packaging'
+            canvas.before:
+                Color:
+                    rgba:  0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            size_hint_y: 0.1
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Individual_Receipt'
+
+
+            Button:
+                text: 'Reconnect'
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+            Label:
+                id: itemnumberdisplay
+                font_size: dp(13)
+                text: 'Item Number'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            spacing: 10
+            size_hint_y: 0.1
+
+            Label:
+            Label:
+                id: refnum
+                bold: True
+                font_size: dp(20)
+                text: ''
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [50,10,50,10]
+            size_hint_y: 0.3
+            BoxLayout:
+                padding: [10,5,10,5]
+                spacing: 10
+                size_hint_y: 0.1
+                Label:
+                    id: productcode
+                    bold: True
+                    font_size: dp(22)
+                    color: [0,0,0,1]
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 30
+            padding: [0,0,0,30]
+            size_hint_y: 0.4
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Total Pieces On Invoice'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    id: qop
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    text: 'Pieces Receipted'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    id: qop_rec
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Total Cartons on Invoice'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: qoc
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    text: 'Cartons Receipted'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: qoc_rec
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+        BoxLayout:
+            padding: [10,5,10,5]
+            size_hint_y: 0.15
+            Label:
+                id: AutoMessage_Displayer
+                bold: True
+                font_size: dp(12)
+                color: [0,0,0,1]
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        Label:
+            size_hint_y: 0.1
+        Button:
+            size_hint_y: 0.15
+            text: 'Send Generated MSG'
+            on_press: root.send_auto_msg()
+            background_normal: ''
+            background_color: 0, 0.52156863, 0.25098039, 1
+
+<Put_Away_Mode>
+    name: 'Put_Away_Mode'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                size_hint_x: 0.7
+                height: 60
+                color: 1,1,1,1
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.27
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                size_hint_x: 0.35
+                on_press: app.root.current = "Selection_Screen"
+            Button:
+                text: "Refresh Shipments"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                size_hint_x: 0.65
+                on_press: root.PutAway_Mode()
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,5]
+            Button:
+                size_hint_x: 0.5
+                text: 'Shipment Reference'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                size_hint_x: 0.3
+                text: 'Status'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+
+        BoxLayout:
+            id: heads
+
+
+
+
+
+
+
+
+<Individual_Put_Away>
+    name: 'Individual_Put_Away'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [0,0,0,5]
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 5
+            Label:
+                text: 'Fleet Retail Packaging'
+                size_hint_y: None
+                size_hint_x: 0.7
+                height: 60
+                color: 1,1,1,1
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: date_displayer
+                size_hint_y: None
+                height: 60
+                color: 1,1,1,1
+                size_hint_x: 0.27
+                canvas.before:
+                    Color:
+                        rgba: 0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            padding: [0,5,0,0]
+            size_hint_y: None
+            height: 100
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                size_hint_x: 0.35
+                on_press: app.root.current = "Put_Away_Mode"
+            Button:
+                text: "Refresh Shipments"
+                background_normal: ''
+                background_color: 0, 0.52156863, 0.25098039, 1
+                size_hint_x: 0.65
+                on_press: root.Send_Tom()
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [5,5,5,5]
+            Button:
+                text: "Reconnect"
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 100
+            spacing: 5
+            padding: [0,0,0,5]
+            Button:
+                size_hint_x: 0.5
+                text: 'Product Code'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+            Button:
+                text: 'Amount of Pallets'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+                size_hint_x: 0.35
+            Button:
+                size_hint_x: 0.3
+                text: 'Status'
+                background_normal: ''
+                background_color: 0, .4666, 0.70196, 1
+
+
+        BoxLayout:
+            id: JoshManik
+
+
+
+
+<Put_Away_Item>
+    name: 'Put_Away_Item'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            size_hint_y: 0.15
+            text: 'Fleet Retail Packaging'
+            canvas.before:
+                Color:
+                    rgba:  0, .4666, 0.70196, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            padding: [0,10,0,0]
+            size_hint_y: 0.15
+            Button:
+                text: 'Go Back'
+                background_normal: ''
+                background_color: 0.89803922, 0.25882353, 0.25882353, 1
+                on_press: app.root.current = 'Individual_Put_Away'
+
+
+            Button:
+                text: 'Reconnect'
+                background_normal: ''
+                background_color: 0.5647058823529, 0.9176470588235, 0.2588235294117, 1
+                on_press: root.connect_to_server()
+            Label:
+                id: itemnumberdisplay
+                font_size: dp(13)
+                text: 'Item Number'
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            spacing: 10
+            size_hint_y: 0.1
+
+            Label:
+            Label:
+                id: refnum
+                bold: True
+                font_size: dp(20)
+                text: ''
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                id: palletnum
+                font_size: dp(13)
+                canvas.before:
+                    Color:
+                        rgba:  0, .4666, 0.70196, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+#        BoxLayout:
+#            orientation: 'vertical'
+#            padding: [60,10,60,0]
+#            Label:
+#                text: 'Location Placed'
+#                size_hint_y: 0.2
+#                canvas.before:
+#                    Color:
+#                        rgba:  0, .4666, 0.70196, 1
+#                    Rectangle:
+#                        pos: self.pos
+#                        size: self.size
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [30,30,30,30]
+            spacing: 30
+            Label:
+                id: ProductCode
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                bold: True
+                font_size: dp(35)
+                size_hint_y: 0.3
+            Label:
+                id: Pallet_Tag
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                bold: True
+                font_size: dp(35)
+                size_hint_y: 0.3
+            TextInput:
+                id: Location
+                multiline: False
+                font_size: 100
+                size_hint_y: 0.3
+                on_text: root.update_padding(args[0])
+                padding_x: self.width/2
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 30
+            padding: [0,0,0,30]
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Total Pieces'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    id: QOP_Total
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    text: 'Pieces on Pallet'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    id: QOP_ONPAL
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Total Cartons'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: QOC_Total
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    text: 'Cartons on Pallet'
+                    size_hint_y: 0.3
+                    canvas.before:
+                        Color:
+                            rgba:  0, .4666, 0.70196, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                Label:
+                    id: QOC_ONPAL
+                    color: 0,0,0,1
+                    bold: True
+                    font_size: dp(40)
+                    canvas.before:
+                        Color:
+                            rgba: 0.6627451, 0.77254902, 0.83921569, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+        BoxLayout:
+            size_hint_y: 0.4
+            Label:
+                id: Description
+                bold: True
+                font_size: dp(25)
+                color: 0,0,0,1
+                canvas.before:
+                    Color:
+                        rgba:  0.6627451, 0.77254902, 0.83921569, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.5
+            BoxLayout:
+                spacing: 10
+                padding: [0,10,0,0]
+                Button:
+                    text: 'Previous Pallet'
+                    background_normal: ''
+                    background_color: (0.96862745, 0.70196078, 0.02745098, 1)
+                    on_press: root.prev_pallet()
+
+                Button:
+                    text: 'Next Pallet'
+                    background_normal: ''
+                    background_color: (0.96862745, 0.70196078, 0.02745098, 1)
+                    on_press: root.next_pallet()
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 10
+                padding: [0,10,0,0]
+                Label:
+                    size_hint_x: 0.3
+                Button:
+                    text: 'Put Away Pallet'
+                    on_press: root.checkers()
+                    background_normal: ''
+                    background_color: 0, 0.52156863, 0.25098039, 1
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 10
+                padding: [0,10,0,0]
+                Button:
+                    text: 'Previous Item'
+                    background_normal: ''
+                    background_color: 0, .4666, 0.70196, 1
+                    on_release: root.PrevItem_Complete()
+                    size_hint_x: 0.6
+                Label:
+                    size_hint_x: 0.4
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 10
+                padding: [0,10,0,0]
+                Button:
+                    id: Marko_Picko
+                    text: 'Mark Item as Complete'
+                    background_normal: ''
+                    background_color: 0, 0.52156863, 0.25098039, 1
+                    on_press: root.Item_Complete()
+                Button:
+                    text: 'Send Data To Office'
+                    background_normal: ''
+                    background_color: (1, 0.68235294, 0.25882353, 1)
+                    on_press: root.mark_container_as_putaway()
