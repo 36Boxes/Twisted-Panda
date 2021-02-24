@@ -16,12 +16,10 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from datetime import datetime
 from kivy.clock import Clock
-from functools import partial
+import plyer
 
-from threading import Thread
-sentry_sdk.init("https://eb8b2b4729224ea586abecb27233b279@sentry.io/1456763")
-                         #       Warehouse IP                  My House IP             Office IP
-HOST = '192.168.0.14'    #       '10.20.30.163'               '192.168.0.14'          '10.20.30.162'
+
+HOST = 'IP ADDRESS HERE'
 
 def POPUP(title, message):
     pop = Popup(title=title, content=Label(text=message),
@@ -70,7 +68,7 @@ def Confirmation_Email(LabelText, Button1Text, PopupTitle, button1function, butt
     box.add_widget(Label(text=''))
     box.add_widget(btn2)
 
-    # Add Label Inbvetween Buttons to give a bit more room for the fat thumbs
+    # Add Label Inbetween Buttons to give a bit more room for the fat thumbs
 
     popup = Popup(title=PopupTitle, title_size= (30),
                   title_align = 'center', content = box,
@@ -169,6 +167,9 @@ class Login_Screen(Screen):
             PutAway_Reference_List = msg[9]
             PutAway_Status_List = msg[10]
             print("Updated")
+            kwargs = {'title': 'hello', 'message': 'new ting',}
+            plyer.notification.notify(**kwargs)
+
 
 
 
